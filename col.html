@@ -1,0 +1,75 @@
+<div id="friend-d">
+    <input type="color">   
+    <button class="close"><i class="fa-solid fa-xmark"></i></button>
+    <input class="title" type="text" placeholder="Enter Name..." value="Friend 1" id="friend-1" maxlength="30">
+    <div class="input-underline"></div>
+    <div class="book-preset">  
+        <label>
+            <input type="radio" name="book0" class="book-custom-radio"> 
+            <span><i class="fa-solid fa-house"></i></span>
+        </label>
+        <label>
+            <input type="radio" name="book0" class="book-preset-radio"  checked>
+            <span>Select Book Preset</span>
+        </label>
+    </div>
+    
+    <div class="select-book-preset" hidden>
+        <fieldset class="tutorial warning">
+            <legend>Warning</legend>
+            <p>Information might be inaccurate please check and if necessary correct the information.</p>
+        </fieldset>
+        <fieldset class="tutorial help">
+            <legend>Help</legend>
+            <p>So you don't have to geather all the Informations of your book on your own, you can search your book here and they get inserted automatically.</p>
+        </fieldset>
+        <div class="search-box">
+            <div class="row">
+                <input type="text" class="input-box" placeholder="Name, Author, ISBN, Keywords" autocomplete="off">
+                <button class="search-button" ><i class="fa-solid fa-repeat"></i></button>
+            </div>
+            <div class="result-box">
+            </div>
+        </div>
+    </div>
+    
+    <div class="select-custom-book-preset">
+        <div class="bookinfos-title">
+            <span class="title">General Book Information</span>
+            <div class="book-title-underline"></div>
+        </div>
+        <div class="book-title">
+            <label>Title:</label>
+            <textarea type="text" class="book-title-i" rows="1" placeholder="Enter the book title" maxlength="1000"></textarea>
+            <div class="book-title-underline"></div>
+        </div>
+        <div class="book-properties-fields">
+            <div class="book-cover">
+                <img src="pics/covers/defaultcover.svg" alt="Cover" class="book-cover-img"/>
+            </div>
+            <div class="book-properties">
+                <label>Author:</label>
+                <textarea rows="1" class="book-author" placeholder="Enter the author." maxlength="150"></textarea>
+                <label>Pages:</label>
+                <input type="number" class="book-pages monospace" placeholder="Enter pages." maxlength="5" min="1">
+                <label>Description:</label>
+                <textarea class="book-descrption" placeholder="Enter a description." maxlength="400"></textarea>
+            </div>
+        </div>
+        <div class="reading-goals">
+            <span class="title">Personal fair Reading-Goal</span>
+            <div class="book-title-underline"></div>
+            <fieldset class="tutorial help">
+                <legend>Help</legend>
+                <p>To ensure a fair race please enter the section of the book you want to race with your friend/s. 
+                    This is due not everyone having the same reading speed and the various difficullty of books.</p>
+            </fieldset>
+            <label>Section of the Book:</label> 
+            <form class="select-reading-goals">
+                <textarea rows="1" class="goal-start scroll monospace" placeholder="Start point." maxlength="6"></textarea> <span class="monospace">-</span>
+                <textarea rows="1" class="goal-end scroll monospace" placeholder="End point." maxlength="6"></textarea>
+            </form>
+            
+        </div>
+    </div>
+</div>
