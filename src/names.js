@@ -1,5 +1,4 @@
-{ 
-  "names": [
+export default [
     "Karen Lopez",
     "Kimberly Smith",
     "Donna Jackson",
@@ -200,5 +199,4 @@
     "Patricia Gonzalez",
     "Karen Thomas",
     "Matthew Johnson"
-  ]
-}
+]

@@ -5,8 +5,61 @@
     --help-color: #d52eff;
     --warning-color: #ff2222;
 }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #15171a;
+    user-select: none;
+
+    scrollbar-width: thin;           
+    scrollbar-color: rgba(160, 160, 160, 0.7) transparent; 
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgb(160, 160, 160);
+  border-radius: 8px;
+}
+::-webkit-scrollbar {
+  width: 8px;
+}
+
 html {
     zoom: 90%;
+}
+body {
+    font-family: "Courier Prime", monospace;
+    font-weight: 400;
+    font-style: normal;
+}
+input, textarea, button, select {
+    resize: unset;
+    overflow: hidden;
+    min-height: max-content;
+    font-family: "Courier Prime", monospace;
+    font-weight: 400;
+    font-style: normal;
+}
+.monospace {
+    font-family: "Consolas", monospace !important;
+}
+
+input::placeholder, textarea::placeholder {
+    font-family: "Courier Prime", monospace;
+    font-weight: 400;
+    font-style: normal;
+}
+input, textarea {
+    flex: 1;
+    height: max-content;
+    background: transparent;
+    border: 0;
+    outline: 0;
+    color: #ffffffa8;
+    width: 100%;
 }
 .tutorial {
     color: #f5f5f5;
@@ -42,48 +95,10 @@ html {
     color: color-mix(in srgb, var(--warning-color) 70%, white);
 }
 
-
 .tutorial p {
     font-size: 15px;
 }
-body {
-    font-family: "Courier Prime", monospace;
-    font-weight: 400;
-    font-style: normal;
-}
-input, textarea, button, select {
-    resize: unset;
-    overflow: hidden;
-    min-height: max-content;
-    font-family: "Courier Prime", monospace;
-    font-weight: 400;
-    font-style: normal;
-}
-.monospace {
-    font-family: "Consolas", monospace !important;
-}
 
-input::placeholder, textarea::placeholder {
-    font-family: "Courier Prime", monospace;
-    font-weight: 400;
-    font-style: normal;
-}
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    background-color: #15171a;
-    user-select: none;
-}
-input, textarea {
-    flex: 1;
-    height: max-content;
-    background: transparent;
-    border: 0;
-    outline: 0;
-    color: #ffffffa8;
-    width: 100%;
-}
 
 .title {
     font-size: 30px;
@@ -305,6 +320,14 @@ button .fa-repeat{
     background: inherit;
 }
 .result-box ul li .book-descrption {
+    display: -webkit-box;
+    -webkit-box-orient:  vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-clamp: 4;
+    -webkit-line-clamp: 4;
+    line-height: 1.4em;
+    max-height: calc(1.4em * 4);
     font-size: 12px;
     margin-top: 5px;
     
@@ -358,6 +381,7 @@ button .fa-repeat{
 }
 .select-custom-book-preset .book-descrption {
     font-size: 15px;
+    overflow-y: scroll !important;
 }
 .book-cover-img {
     max-width: 160px;
