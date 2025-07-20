@@ -5,10 +5,11 @@ import defaultCover from "../assets/covers/defaultCover.svg"
 
 export default function SearchBookPreset({ selectBook }) {
     const [results, setResults] = useState([]); 
-    const [showShowMore, setShowShowMore] = useState(true);
+    let showShowMore  = useRef(true);
     let currentInput = useRef('');
     let abortController = useRef(new AbortController());
     let timeout = useRef(setTimeout([], 0));
+    const lastElement = useRef(null);
     
 
     async function getBooksBySearch(input, maxResults, delay) {
@@ -20,7 +21,7 @@ export default function SearchBookPreset({ selectBook }) {
         setResults(() => ({
             id: -1,
             error: 'Searching...'
-        }))
+        }));
 
         await new Promise(resolve =>  {
             timeout.current = setTimeout(resolve, delay)
@@ -28,98 +29,78 @@ export default function SearchBookPreset({ selectBook }) {
 
         if(input.length <= 0) return '';
 
-        console.log('Search started for: ', input);
-        const API_KEY = import.meta.env.VITE_API_KEY;
         try {
-            const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(input)}&maxResults=${maxResults}&key=${API_KEY}`, 
-                                        {signal: abortController.current.signal})
+            const res = await fetch(`https://arch.the-jzt.de/api/search?q=${input}&maxResults=${maxResults}`, {signal: abortController.current.signal})
             if(!res.ok) {
-                let searchErr = ('Something went wrong. Code: ', res.status)
-                if(res.status == 429) searchErr = 'Too many requests. (Rate-Limit)'
-                return ({
-                    id: -1,
-                    error: searchErr
-                })
-            } 
-            const data = await res.json()
-            const items = await data.items;
-            if(!items) {
-                return ({
-                    id: -1,
-                    error: 'No results found'
-                })
-            } 
-            return items.slice(0, maxResults).map((item, index) => {
-                const volumeInfo = item.volumeInfo
-                return ({
-                    id: index,
-                    bookId: item.id,
-                    title: volumeInfo.title,
-                    cover: volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : defaultCover,
-                    authors: volumeInfo.authors ? volumeInfo.authors.join(', ') : 'Unknown Author',
-                    publishedDate: volumeInfo.publishedDate || 'Unknown Year',
-                    pages: volumeInfo.pageCount || 'Unknown Pages',
-                    description: volumeInfo.description || 'No description available'
-                })
-            })
+                console.error(res.json().error, res.json.details)
+                return null;
+            }
+            return (await res.json());
         } catch (err) {
             if(err.name == 'AbortError') { 
-                console.info('Search was aborded. For: ', input)
                 return ({
                     id: -1,
                     error: 'Searching...'
                 })
             } else { console.error('An error occured at the search process: ', err) }
-        }   
+        }        
     }
 
     async function updateResults(input, maxResults, delay) { 
         const books = await getBooksBySearch(input, maxResults, delay);
-        console.log('Search finished for: ', input, " with: ", books);
-        setShowShowMore(true);
         setResults(() => books); 
     }    
 
     function search(e, maxResults) {
         maxResults = maxResults ? maxResults : 3
         const input = e.target.value.trim()
-        //console.log(`CurrentInput: ${currentInput}, NewInput: ${input}`)
         if(currentInput === input) return;
         currentInput.current = input;
+        showShowMore.current = true;
         updateResults(input, maxResults);
     }
 
-    let showMoreElement = showShowMore ? <a onClick={() => {
-        setShowShowMore(false);
-        updateResults(currentInput.current, results.length+3, 0)
-    }} herf="#">See more results</a> : <>Please wait...</>
+    let showMoreElement = showShowMore.current ? <a onClick={() => {
+        let maxResults = results.length+3;
+        if(results > 40) {
+            maxResults = 40;
+            showShowMore.current = false;
+        }
+        updateResults(currentInput.current, maxResults, 0)
+    }} herf="#">See more results</a> : <>Please change your search input</>
 
     
 
     let resultElements = ''
     if(results == null) { resultElements = <li className="no-hover">- Something went wrong -</li> }
     else if(results.id == -1) { resultElements = <li className="no-hover">- {results.error} -</li>}
-    else if(results.length > 0) { resultElements = (<> {results.map(result => (
-                <li key={result.id} onClick={() => selectBook(result)}>
+    else if(results.length > 0) { resultElements = (<> {results.map((result, index) => (
+                <li key={result.id} onClick={() => selectBook(result)} ref={lastElement}>
                   <img src={result.cover} alt="cover"/> 
-                    <div>
+                    <div className="text">
                         <span className="book-title">{result.title}<span className="book-proptie-p"></span></span>
                         
-                        <span className="book-properties">
-                            <span><span className="book-proptie-p">by</span> {result.authors}</span>
-                            <span><span className="book-proptie-p"> &#8231; Pages: </span> {result.pages}</span>
-                            <span><span className="book-proptie-p"> &#8231; Published: </span> {result.publishedDate}</span>
-                        </span>
-                        <span className="book-descrption">{result.description}</span> 
+                        <div className="book-properties">
+                            <span className="book-propti"><span className="book-proptie-p">by </span>{result.authors ||'Unknown Author'}</span>
+                            <span className="book-propti"><span className="book-proptie-p">Pages: </span>{result.pages || 'Unknown Pages'}</span>
+                            <span className="book-propti"><span className="book-proptie-p"> Published: </span>{result.publishedDate || 'Unknown Year'}</span>
+                        </div>
+                        <span className="book-descrption">{result.description || 'No description available'}</span> 
                     </div>
                   </li>))}
-    <li className="no-hover show-more"> {showMoreElement} </li> </> )}    
+    <li className="no-hover show-more"> {showMoreElement} </li> </> )
+    }    
+
+    useEffect(() => {
+        if(!lastElement.current) return;
+        lastElement.current.scrollIntoView();
+    })
     
     return (
         <div className="select-book-preset">
             <fieldset className="tutorial warning">
                 <legend>Warning</legend>
-                <p>Information might be inaccurate please check and if necessary correct the information.</p>
+                <p>Information might be inaccurate please check for accuracy and if necessary correct the information.</p>
             </fieldset>
             <fieldset className="tutorial help">
                 <legend>Help</legend>

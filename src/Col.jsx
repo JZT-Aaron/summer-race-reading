@@ -1,21 +1,50 @@
 import SearchBookPreset from "./components/SearchBookPreset"
 import EditBookPreset from "./components/EditBookPreset"
-import { useState } from "react";
-
-import defaultCover from "./assets/covers/defaultCover.svg"
+import ColorPicker from "./components/colorpicker";
+import { useEffect, useRef, useState } from "react";
 
 export default function Col(props) {
     const id = props.id;
-    const [presetBook, setPresetBook] = useState({
-        bookId: '',
-        title: '',
-        cover: defaultCover,
-        authors: '',
-        publishedDate: '',
-        pages: '',
-        description: ''
-    });
+    const presetBook = props.presetBook;
+    const setPresetBook = props.setPresetBook;
+    const friendDiv = useRef(null);
     const [selectedTab, setSelectedTab] = useState(1);
+    const deleteCover = (public_id) => {
+        props.deleteCover(id, public_id);
+    }
+    const setColor = (color) => {
+        props.setColor(id, color);
+    }
+
+    function handelFriendDivRef(element) {
+        if(props.setLastCol) props.setLastCol(element);
+        friendDiv.current = element;
+    }
+
+    useEffect(() => {
+        friendDiv.current.style.setProperty('--main-color', props.color.hex)
+    })
+
+    function handelChange(e) {
+        const input = e.target;
+        const property = input.id.replace('-' + id, '');
+        let value = input.value;
+        if(property === 'pages' && input.value != '') {
+            const pages = parseFloat(value);
+            if(!pages) return;
+            if(pages > parseFloat(input.max)) return;
+            value = pages;
+        }
+        if(property === 'goal') {
+            let goalValue = parseInt(input.value);
+            goalValue = isNaN(goalValue) ? '' : goalValue;
+            value = ({
+                ...presetBook.goal,
+                [Array.from(input.classList).find(className => className.startsWith('goal'))]: goalValue
+            })
+        }
+        setPresetBook(id ,({...presetBook, [property]: value}));
+    }
 
 
     function updateTabSelected(e) {
@@ -24,18 +53,18 @@ export default function Col(props) {
     }
 
     async function selectBook(book) {
+        const goal = presetBook.goal;
         book = {
             ...book,
-            cover: await getBiggestCoverImage(book.bookId)
+            cover: {url: await getBiggestCoverImage(book.bookId), publicId: null},
+            publishedDate: book.publishedDate.length <= 4 ? book.publishedDate + '-01-01' : book.publishedDate,
+            goal: {goalStart: goal.goalStart, goalEnd: goal.goalEnd === '' ? book.pages : goal.goalEnd }
         }
-        setPresetBook(book);
+        
+        setPresetBook(id, book);
         setSelectedTab(0);
     }
-    
-    function getRandomHexColor() {
-        return '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
-    }   
-
+      
     async function getBiggestCoverImage(bookID) {
         let pic = null
         var index = 4;
@@ -76,10 +105,10 @@ export default function Col(props) {
 
     return (
         <>
-            <div id={"friend-" + id}  className="col friend">
-                { /*<input type="color"/> */}
+            <div id={"friend-" + id}  className="col friend" ref={handelFriendDivRef}>
+                <ColorPicker colors={props.colors} currentColor={props.color} setColor={setColor} />
                 {props.allowClose && <button onClick={() => props.removeCol(id)} className="close"><i className="fa-solid fa-xmark"></i></button>}
-                <input className="title" type="text" placeholder="Enter Name..." defaultValue={props.friendName} id={"friend-" + id} maxLength="30"/>
+                <input className="title" type="text" placeholder="Enter Name..." aria-label="Enter the Name of your Friend" value={props.friendName} onChange={(e) => props.onNameChange(id, e.target.value)} id={"friend-" + id} maxLength="30"/>
                 <div className="input-underline"></div>
                 <div>  
                     <form className="book-preset">    
@@ -94,7 +123,7 @@ export default function Col(props) {
                     </form>
                 </div>
                 
-                {(selectedTab == 0) && <EditBookPreset presetBook={presetBook}/>} 
+                {(selectedTab == 0) && <EditBookPreset id={props.id} deleteCover={deleteCover} setPresetBook={setPresetBook} onChange={handelChange} presetBook={presetBook}/>} 
                 
                 {(selectedTab == 1) && <SearchBookPreset selectBook={selectBook}/>} 
                 

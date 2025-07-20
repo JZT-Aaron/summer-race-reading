@@ -18,3 +18,4 @@
 + Finishing the UI for selection of Friends and the corresponding book
 + Adding a page where the progress of each friend can be viewed
 + Website for each friend to set their progress
++ Phone Support
