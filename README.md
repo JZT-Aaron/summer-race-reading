@@ -1,7 +1,7 @@
 # Summer Race Reading
 
 > [!IMPORTANT]
-> This Project is still work in progress. And is in the current moment not intended for usage.
+> This Project is still work in progress. In the moment it is not finished.
 
 > Information: This WebApp is in the process of being created for the Summer of Making from HackClub.
 
