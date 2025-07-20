@@ -260,6 +260,13 @@ input.title:hover + .input-underline, input.title:focus + .input-underline {
     box-shadow: rgb(255, 255, 255) 6px 6px 0;
 }
 
+.color-picker-title {
+    position: absolute;
+    top: -38px;
+    left: -12px;
+    font-size: 14px;
+}
+
 .color-picker-main {
     position: absolute;
     border-radius: 5px;
@@ -613,6 +620,15 @@ button .fa-repeat{
 .book-cover .overlay img {
     background-color: transparent;
     width: 80px;
+}
+.book-cover .overlay a {
+    position: absolute;
+    bottom: 0px;
+    padding: 2px;
+    background-color: transparent;
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    font-size: 9px;
 }
 
 .book-cover .overlay input {

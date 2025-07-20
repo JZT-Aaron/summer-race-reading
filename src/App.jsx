@@ -156,7 +156,7 @@ function App() {
   <div ref={mainDiv}>
     <form >
       <label htmlFor="show-help" className="show-help-form">
-        <input type="checkbox" id="show-help" onChange={handleShowHelpChange} defaultChecked={showHelp} checked={showHelp}></input>
+        <input type="checkbox" id="show-help" onChange={handleShowHelpChange} checked={showHelp}></input>
         <span className="checkmark"></span>
         Show Help
       </label>

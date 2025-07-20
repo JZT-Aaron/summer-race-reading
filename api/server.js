@@ -17,7 +17,7 @@ app.use(express.json());
 
 app.get('/api/search', async(req, res) => {
     const input = req.query.q;
-    const maxResults = req.query.maxResults;
+    const maxResults = parseInt(req.query.maxResults, 10) || 3;
 
     const API_KEY = process.env.BOOK_API_KEY;
     try {
@@ -39,7 +39,7 @@ app.get('/api/search', async(req, res) => {
             return;
         } 
         const data = await bookRes.json()
-        const items = await data.items;
+        const items = data.items;
         if(!items) {
             res.json({
                 id: -1,
@@ -53,7 +53,7 @@ app.get('/api/search', async(req, res) => {
                 id: index,
                 bookId: item.id,
                 title: volumeInfo.title,
-                cover: volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : defaultCover,
+                cover: volumeInfo.imageLinks ? volumeInfo.imageLinks.thumbnail : 'https://arch.the-jzt.de/defaultcover.svg',
                 authors: volumeInfo.authors ? volumeInfo.authors.join(', ') : '',
                 publishedDate: volumeInfo.publishedDate || '',
                 pages: volumeInfo.pageCount || '',

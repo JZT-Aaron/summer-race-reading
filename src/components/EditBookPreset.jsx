@@ -45,7 +45,8 @@ export default function EditBookPreset(props) {
 
         setIsLoading(true);
 
-        const res = await fetch('https://arch.the-jzt.de/api/upload', {
+        try {
+            const res = await fetch('https://arch.the-jzt.de/api/upload', {
             method: 'POST',
             body: formData,
         })
@@ -57,9 +58,17 @@ export default function EditBookPreset(props) {
 
         const data = await res.json();
         props.setPresetBook(id, ({...book, cover: {url: data.url, public_id: data.public_id}}));
-        setTimeout(() => {
-            setIsLoading(false);
-        }, 1000)
+        } catch (err) {
+            
+            console.error(err)
+        } finally {
+            setTimeout(() => {
+                setIsLoading(false);
+            }, 1000)
+        }
+
+        
+        
     }
 
     const totalPages = book.goal.goalEnd-book.goal.goalStart;
@@ -88,6 +97,7 @@ export default function EditBookPreset(props) {
                             </div>
                             <div className={'overlay' + (isLoading ? ' loading' : ' no-hover')}>
                                 <img src={loading} alt="loading" />
+                                <a href='https://loading.io/'>Animation by loading.io</a>
                             </div>
                             
                         </div>

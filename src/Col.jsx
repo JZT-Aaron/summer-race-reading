@@ -106,6 +106,8 @@ export default function Col(props) {
     return (
         <>
             <div id={"friend-" + id}  className="col friend" ref={handelFriendDivRef}>
+                <span className="color-picker-title">Pick <br />
+                        Color:</span>
                 <ColorPicker colors={props.colors} currentColor={props.color} setColor={setColor} />
                 {props.allowClose && <button onClick={() => props.removeCol(id)} className="close"><i className="fa-solid fa-xmark"></i></button>}
                 <input className="title" type="text" placeholder="Enter Name..." aria-label="Enter the Name of your Friend" value={props.friendName} onChange={(e) => props.onNameChange(id, e.target.value)} id={"friend-" + id} maxLength="30"/>
