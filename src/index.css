@@ -97,6 +97,10 @@ input[type="data"] {
     width: 1px;
 }
 
+.show-help-form:hover {
+    cursor: pointer;
+}
+
 .show-help-form input:hover + .checkmark::before,
 .show-help-form input:hover + .checkmark::after {
     background-color: color-mix(in srgb,var(--help-color) 30%, black) !important;
@@ -254,6 +258,7 @@ input.title:hover + .input-underline, input.title:focus + .input-underline {
 }
 
 .selected-color:hover, .selected-color.selected {
+    cursor: pointer;
     position: relative;
     bottom: 5px;
     right: 5px;
@@ -304,15 +309,15 @@ input.title:hover + .input-underline, input.title:focus + .input-underline {
     transform: rotate(45deg);
 }
 
-
+.color:hover {
+    cursor: pointer;
+}
 
 .color:hover, .color.selected {
     bottom: 4px;
     right: 4px;
     box-shadow: rgb(255, 255, 255) 4px 4px 0;
 }
-
-
 
 .main-title {
     color: #e024ca;
