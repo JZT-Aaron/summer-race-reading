@@ -7,8 +7,11 @@
 
 ---
 
+## 🏁 What is it about
 
-## 📖 Race Reading – User Guide
+**Summer Race Reading** is a **web app** to motivate you and your friends to read by creating a **competition**. You and your friends can agree among yourselves on a **fair section** of your individual books that you want to read in the same time frame. Everyone then has to enter their **current page number** to give their friends **live updates**, and whoever finishes their section first **wins**.
+
+## 📖 User Guide
 
 ### 🏠 Homepage Overview
 
@@ -75,7 +78,34 @@ To change the color of a Friend Column:
 💡 **Tip:** Colors that are already in use are marked with a **grey diagonal line**.  
 If you choose one of them, the colors will be **swapped** between the two columns.
 
+## Setup Instructions
 
+> [!TIP]
+> If you’re just here to try out the demo, use the demo provided on The Summer of Making Project page to test it quickly.
+
+### Informations
+
+- [Node.js](https://nodejs.org/) - **v22** (tested)
+- The Fronted was written in React.
+- The **backend** is written in plain JavaScript (Node.js), located in the `/api` folder.
+
+Please your preferred way to run the two. The Backend **port** is **3001**. 
+
+### 🌐 Environment Configuration
+
+Please enter the Api-Key to the [Goolge Books API](https://developers.google.com/books/docs/v1/using#APIKey) (just the Api-Key) as
+
+```bash
+BOOK_API_KEY = ''
+```
+
+And then from [Cloudinary](https://cloudinary.com/) the Cloud Name, Cloud Secret and the Api-Key as
+
+```bash
+CLOUD_NAME = '' 
+CLOUD_SECRET = '' 
+CLOUD_API_KEY = ''
+```
 
 ## 📊 Basic Progress Overview
 
