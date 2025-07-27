@@ -1,6 +1,7 @@
 import SearchBookPreset from "./components/SearchBookPreset"
 import EditBookPreset from "./components/EditBookPreset"
 import ColorPicker from "./components/colorpicker";
+import Alert from './components/Alert'
 import { useEffect, useRef, useState } from "react";
 
 export default function Col(props) {
@@ -8,6 +9,7 @@ export default function Col(props) {
     const presetBook = props.presetBook;
     const setPresetBook = props.setPresetBook;
     const friendDiv = useRef(null);
+    const [error, setError] = useState(null);
     const [selectedTab, setSelectedTab] = useState(1);
     const deleteCover = (public_id) => {
         props.deleteCover(id, public_id);
@@ -104,8 +106,9 @@ export default function Col(props) {
     }
 
     return (
-        <>
+        <>  
             <div id={"friend-" + id}  className="col friend" ref={handelFriendDivRef}>
+                {error && <Alert title={error.title} iconClass={error.iconClass} setError={setError} undertitle={error.error} message={error.details} />}
                 <span className="color-picker-title">Pick <br />
                         Color:</span>
                 <ColorPicker colors={props.colors} currentColor={props.color} setColor={setColor} />
@@ -125,7 +128,7 @@ export default function Col(props) {
                     </form>
                 </div>
                 
-                {(selectedTab == 0) && <EditBookPreset id={props.id} deleteCover={deleteCover} setPresetBook={setPresetBook} onChange={handelChange} presetBook={presetBook}/>} 
+                {(selectedTab == 0) && <EditBookPreset id={props.id} setError={setError} deleteCover={deleteCover} setPresetBook={setPresetBook} onChange={handelChange} presetBook={presetBook}/>} 
                 
                 {(selectedTab == 1) && <SearchBookPreset selectBook={selectBook}/>} 
                 

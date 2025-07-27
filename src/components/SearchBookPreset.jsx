@@ -30,7 +30,7 @@ export default function SearchBookPreset({ selectBook }) {
         if(input.length <= 0) return '';
 
         try {
-            const res = await fetch(`https://arch.the-jzt.de/api/search?q=${input}&maxResults=${maxResults}`, {signal: abortController.current.signal})
+            const res = await fetch(`${import.meta.env.VITE_API}/api/search?q=${input}&maxResults=${maxResults}`, {signal: abortController.current.signal})
             if(!res.ok) {
                 console.error(res.json().error, res.json.details)
                 return null;

@@ -62,7 +62,7 @@ input[type="data"] {
 }
 
 .show-help-form {
-    z-index: 2;
+    z-index: 9999;
     color: var(--help-color);
     display: inline-flex;
     position: fixed;
@@ -122,6 +122,55 @@ input[type="data"] {
 
 .show-help-form .checkmark::after {
     transform: rotate(-45deg);
+}
+
+.alert-box {
+    z-index: 9998;
+    position: absolute;
+    top: 0; bottom: 0; right: 0; left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(131, 131, 131, 0.116);
+    
+}
+
+.alert-box .title i {
+    font-size: 25px;
+    margin-right: 7px;
+}
+
+.alert-box .content {
+    position: relative;
+    flex-direction: column;
+    display: flex;
+    border-radius: 10;
+    padding: 10px;
+    background-color: #15171a;
+    height: max-content;
+    width: 500px;
+    
+}
+
+.alert-box .content button {
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    top: 10px;
+    right: 0px;
+    color: white;
+    margin-bottom: 10px;
+    width: 100%;
+    outline: var(--main-color) 1px solid;
+    padding: 5px;
+    border-radius: 5px;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.alert-box button:hover {
+    cursor: pointer;
+    background-color: var(--main-color);
+    color: black;
 }
 
 .friends-total {
@@ -333,7 +382,7 @@ body {
 div.setup-friends {
     border-left: #df21cf 1px dotted;
     margin: 0px auto 0px auto;
-    --gap: 70px;
+    --gap: 50px;
     display: flex;
     gap: var(--gap);
     min-height: 700px;
@@ -344,6 +393,7 @@ div.setup-friends {
     overflow-x: auto;
 }
 .col {
+    padding: 20px;
     --col-width: 550px;
     position: relative;
     color: #ffffffa8;

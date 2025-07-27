@@ -7,9 +7,8 @@ import cloudinary  from './cloudinary.js'
 const app = express();
 const upload = multer({ dest: 'temp/' });
 
-
 app.use(cors({
-    orgion: 'http://localhost:5173',
+    origin: 'http://localhost:5173',
     credentials: true,
 }));
 
@@ -67,9 +66,18 @@ app.get('/api/search', async(req, res) => {
 
 
 app.post('/api/upload', upload.single('image'), async (req, res) => {
+    const maxFileSize = 10;
+    let currentFileSize = req.file.size;
+
     const filePath = req.file.path;
     
     try {
+        if(currentFileSize > (maxFileSize * 1024 * 1024)) {
+            currentFileSize = (currentFileSize / 1024 / 1024).toFixed(2);
+            res.status(500).json({error: 'Too big Filesize', details: (`The maxium Filesize is at ${maxFileSize} MB you image is ${currentFileSize} MB big. That's ${currentFileSize-maxFileSize} MB to big.`)})
+            return;
+        }
+
         const result = await cloudinary.uploader.upload(filePath, {
             folder: 'covers',
         })
@@ -97,6 +105,7 @@ app.post('/api/delete', async (req, res) => {
 
 
 })
+
 
 app.listen(3001, () => {
     console.log('Server is listening on http://localhost:3001')
