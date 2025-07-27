@@ -316,8 +316,8 @@ input.title:hover + .input-underline, input.title:focus + .input-underline {
 
 .color-picker-title {
     position: absolute;
-    top: -38px;
-    left: -12px;
+    top: -20px;
+    left: 10px;
     font-size: 14px;
 }
 
