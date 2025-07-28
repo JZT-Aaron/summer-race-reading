@@ -804,6 +804,23 @@ button .fa-repeat{
 }
 
 
+.submit {
+    color: white;
+    font-size: 50px;
+    border: #df21cf 5px solid;
+    padding: 15px;
+    margin-top: 20px;
+    margin-bottom: 100px;
+    border-radius: 15px;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.submit:hover {
+    cursor: pointer;
+    color: black;
+    background-color: #df21cf;
+}
+
 .pixelify {
     font-family: "Pixelify Sans", serif;
     font-optical-sizing: auto;

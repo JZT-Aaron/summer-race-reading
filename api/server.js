@@ -3,6 +3,8 @@ import cors from 'cors';
 import multer from 'multer'
 import fs from 'fs'
 import cloudinary  from './cloudinary.js'
+import mysql from 'mysql2/promise'
+import {v4 as uuid} from 'uuid'
 
 const app = express();
 const upload = multer({ dest: 'temp/' });
@@ -106,6 +108,80 @@ app.post('/api/delete', async (req, res) => {
 
 })
 
+
+const db = mysql.createPool({
+    host: 'arch.the-jzt.de',
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME
+})
+
+app.post('/config', async (req, res) => {
+    const friends = req.body.users;
+    const slug = uuid();
+    const name = 'coming'
+
+    const conn = await db.getConnection();
+    await conn.beginTransaction();
+
+    try {
+
+        const [result] = await conn.query(
+            'INSERT INTO configs (slug, name) VALUES (?, ?)',
+            [slug, name || null]
+        );
+
+        const configId = result.insertId;
+
+        for (const friend of friends) {
+            await conn.query(
+                'INSERT INTO friends (name, config_id, color, book) VALUES (?, ?, ?, ?)',
+                [friend.friendName, configId, friend.color.hex, JSON.stringify(friend.presetBook)]
+            );
+        }
+
+        await conn.commit();
+        console.log(slug);
+        res.json({slug});
+
+    } catch (err) {
+        await conn.rollback();
+        console.error(err);
+        res.status(500).json({error: 'An error occured whilest trying to upload the users data.', details: err})
+    } finally {
+        conn.release();
+    }
+
+})
+
+app.get('/config/:slug', async (req, res) => {
+    const {slug} = req.params;
+
+    try {
+        const [[config]] = await db.query(
+            'SELECT * FROM configs WHERE slug = ?',
+            [slug]
+        );
+
+        if(!config) {
+            return res.status(404).json({ error: "Config couldn't be found."})
+        }
+
+        const [friend] = await db.query(
+            'SELECT * FROM friends WHERE config_id = ?',
+            [config.id]
+        )
+
+        if(!friend || friend.length === 0) {
+            return res.status(404).json({ error: "No friends found for this config."})
+        }
+
+        res.json({ config, friend});
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({error: 'An error occured while look for your config'});
+    }
+});
 
 app.listen(3001, () => {
     console.log('Server is listening on http://localhost:3001')
